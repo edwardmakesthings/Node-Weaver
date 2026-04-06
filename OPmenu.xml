@@ -6,18 +6,48 @@
 		<separatorItem/>
 		<subMenu id="nodeweaver_menu">
 			<label>Node Weaver</label>
-			<scriptItem id="opmenu.nw_stringweaver">
-				<label>Modify Node Names</label>
+			<scriptItem id="opmenu.nw_stringweaver_this">
+				<label>Modify This Node's Name</label>
 				<context>
 					<expression>kwargs["node"].type().category().name() in ("Object", "Sop", "Chop", "Top", "Vop") and kwargs["node"].isFlagWritable(hou.nodeFlag.Display)</expression>
 				</context>
 				<scriptCode>
 				<![CDATA[
 from importlib import reload
-from nodeweaver import stringweaver
+from nodeweaver.stringweaver import stringweaver
 reload(stringweaver)
 
-window = stringweaver.StringWeaver(parm_start=False, start_value=kwargs["node"].name())
+window = stringweaver.StringWeaver(parm_start=False, nodes=[kwargs["node"]])
+window.showWindow()]]>
+				</scriptCode>
+			</scriptItem>
+			<scriptItem id="opmenu.nw_stringweaver_network">
+				<label>Modify Node Names in Network</label>
+				<context>
+					<expression>kwargs["node"].type().category().name() in ("Object", "Sop", "Chop", "Top", "Vop") and kwargs["node"].isFlagWritable(hou.nodeFlag.Display)</expression>
+				</context>
+				<scriptCode>
+				<![CDATA[
+from importlib import reload
+from nodeweaver.stringweaver import stringweaver
+reload(stringweaver)
+
+window = stringweaver.StringWeaver(parm_start=False, nodes=list(kwargs["node"].parent().children()))
+window.showWindow()]]>
+				</scriptCode>
+			</scriptItem>
+			<scriptItem id="opmenu.nw_stringweaver_recursive">
+				<label>Modify Node Names (Recursive)</label>
+				<context>
+					<expression>kwargs["node"].type().category().name() in ("Object", "Sop", "Chop", "Top", "Vop") and kwargs["node"].isFlagWritable(hou.nodeFlag.Display)</expression>
+				</context>
+				<scriptCode>
+				<![CDATA[
+from importlib import reload
+from nodeweaver.stringweaver import stringweaver
+reload(stringweaver)
+
+window = stringweaver.StringWeaver(parm_start=False, nodes=list(kwargs["node"].parent().allSubChildren()))
 window.showWindow()]]>
 				</scriptCode>
 			</scriptItem>

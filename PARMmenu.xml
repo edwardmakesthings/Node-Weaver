@@ -6,24 +6,68 @@
 		<separatorItem/>
 		<subMenu id="nodeweaver_menu">
 			<label>Node Weaver</label>
-			<scriptItem id="nw_stringweaver">
-				<label>Modify Parm Values</label>
+			<scriptItem id="nw_stringweaver_this">
+				<label>Modify This Parameter</label>
 				<context>
 					<expression>
+import hou
 if len(kwargs["parms"]) == 0:
 	return False
-from nodeweaver import ui_utils
-return ui_utils.isParmOfType(kwargs["parms"][0])
+return isinstance(kwargs["parms"][0].parmTemplate(), hou.StringParmTemplate)
 					</expression>
 				</context>
 				<scriptCode>
 				<![CDATA[
 from importlib import reload
-from nodeweaver import stringweaver
+from nodeweaver.stringweaver import stringweaver
 reload(stringweaver)
 
-window = stringweaver.StringWeaver(parm_start=True, start_value=kwargs["parms"][0].eval())
+window = stringweaver.StringWeaver(parm_start=True, parms=list(kwargs["parms"]))
 window.showWindow()]]>
+				</scriptCode>
+			</scriptItem>
+			<scriptItem id="nw_stringweaver_all">
+				<label>Modify All String Parameters</label>
+				<context>
+					<expression>
+import hou
+if len(kwargs["parms"]) == 0:
+	return False
+return isinstance(kwargs["parms"][0].parmTemplate(), hou.StringParmTemplate)
+					</expression>
+				</context>
+				<scriptCode>
+				<![CDATA[
+from importlib import reload
+from nodeweaver.stringweaver import stringweaver
+reload(stringweaver)
+
+node = kwargs["parms"][0].node()
+window = stringweaver.StringWeaver(parm_start=True, nodes=[node])
+window.showWindow()]]>
+				</scriptCode>
+			</scriptItem>
+		</subMenu>
+		<separatorItem/>
+		<subMenu id="cad_utils_menu">
+			<label>Node Weaver</label>
+			<scriptItem id="cad_add_unit_conversion">
+				<label>Add Unit Conversion</label>
+				<context>
+					<expression>
+if len(kwargs["parms"]) == 0:
+	return False
+from nodeweaver.utils import cad
+return cad.is_numeric_parm(kwargs["parms"][0])
+					</expression>
+				</context>
+				<scriptCode>
+				<![CDATA[
+from importlib import reload
+from nodeweaver.utils import cad
+reload(cad)
+
+cad.add_unit_conversion(kwargs)]]>
 				</scriptCode>
 			</scriptItem>
 		</subMenu>

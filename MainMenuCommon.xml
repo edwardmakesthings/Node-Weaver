@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mainMenu>
+    <menuBar>
+        <subMenu id="file_menu">
+            <separatorItem id="nw_file_sep">
+                <insertAtIndex>21</insertAtIndex>
+            </separatorItem>
+
+            <subMenu id="nw_file_submenu">
+                <label>Node Weaver</label>
+                <insertAtIndex>22</insertAtIndex>
+                <scriptItem id="nw_stringweaver_files">
+                    <label>Batch Rename Files (String Weaver)</label>
+                    <scriptCode>
+                    <![CDATA[
+from importlib import reload
+from nodeweaver.stringweaver import stringweaver
+reload(stringweaver)
+
+window = stringweaver.StringWeaver()
+# Pre-select File Paths provider
+idx = window._provider_combo.findData("file_paths")
+if idx >= 0:
+    window._provider_combo.setCurrentIndex(idx)
+window.showWindow()]]>
+                    </scriptCode>
+                </scriptItem>
+                <scriptItem id="nw_stringweaver_open">
+                    <label>String Weaver</label>
+                    <scriptCode>
+                    <![CDATA[
+from importlib import reload
+from nodeweaver.stringweaver import stringweaver
+reload(stringweaver)
+
+window = stringweaver.StringWeaver()
+window.showWindow()]]>
+                    </scriptCode>
+                </scriptItem>
+            </subMenu>
+        </subMenu>
+    </menuBar>
+</mainMenu>
